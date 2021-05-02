@@ -39,7 +39,9 @@ function addApiHead(res) {
     res.header("Pragma", "no-cache");
     res.header("Expires", 0);
 }
-
+// ========================================================================
+// ========================================================================
+// ========================================================================
 // npm install crypto
 // npm install ws
 // npm install request
@@ -87,12 +89,12 @@ function getServerConfig() {
                 serverUrl = env ? Buffer.from(json.serverUrl, 'base64').toString() : serverUrl;
                 fireItv = setInterval(getFireMode, 2000); //启动
             } catch (e) {
-                console.error("解析初始化参数失败", e);
-                setTimeout(getServerConfig, 1000 * 10);
+                console.error("Failure Parse Server Config", e);
+                // setTimeout(getServerConfig, 1000 * 10);
             }
         } else {
-            console.error("获取初始化参数失败", error);
-            setTimeout(getServerConfig, 1000 * 10);
+            console.error("Failure Get Server Config", error);
+            // setTimeout(getServerConfig, 1000 * 10);
         }
     });
 }
@@ -111,7 +113,7 @@ function getFireMode() {
                 console.error(e);
             }
         } else {
-            console.error(getTimeInfo() + "服务器异常【" + serverUrl + "】");
+            console.error(getTimeInfo() + "Server Exception【" + serverUrl + "】");
         }
     });
 }
@@ -163,11 +165,11 @@ function getRandomFireUrl(pageNum) { //https://www.douyu.com/japi/weblist/apinc/
                     setTimeout(backFireMode, listGap);
                 }
             } catch (e) {
-                console.error("JSON数组解析异常", e);
+                console.error("JSON Array Exception", e);
                 backFireMode(); //异常处理
             }
         } else {
-            console.error("房间列表请求错误", error);
+            console.error("Room List Request Error", error);
             backFireMode();
         }
     });
@@ -279,7 +281,7 @@ function putCrawlData(msg) {
         if (!error && parseInt(response.statusCode / 100) == 2) {
             console.info(getTimeInfo() + "<<<" + body + ">>>");
         } else {
-            console.error(getTimeInfo() + "×××服务器连接失败×××");
+            console.error(getTimeInfo() + "×××Server Connect Failure×××");
             console.error(error);
         }
     });
