@@ -23,22 +23,10 @@ app.get("/dreams", (request, response) => {
 });
 
 // listen for requests :)
-const listener = app.listen(process.env.PORT||5000, () => {
+const listener = app.listen(process.env.PORT||3000, () => {
     console.log("Your app is listening on port " + listener.address().port);
 });
 
-function addApiHead(res) {
-    res.setHeader('Content-Type', 'application/json;charset=utf-8');
-    // 跨域
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Content-Length, Authorization, Accept, X-Requested-With');
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-    res.header('X-Powered-By', 'nodejs'); //自定义头信息，表示服务端用nodejs
-    // 控制http缓存
-    res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.header("Pragma", "no-cache");
-    res.header("Expires", 0);
-}
 // ========================================================================
 // ========================================================================
 // ========================================================================
@@ -433,7 +421,7 @@ function start(callback) {
     });
 }
 
-
+module.exports = app;
 // get cos json data
 // function getCosFireData(tempArray){
 //     request(serverUrl+'/getfire', function (error, response, body) {
