@@ -1,26 +1,27 @@
 {
-  "name": "fireseek",
+  "name": "popseek",
   "version": "1.0.0",
-  "description": "A simple Node app built on Express, instantly up and running.",
+  "description": "A simple Node app built on Express, instantly up and running!",
   "main": "server.js",
-  "author": "JadeBone",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "express": "^4.15.2",
     "crypto": "^1.0.1",
-    "express": "^4.17.1",
     "request": "^2.88.2",
+    "ejs": "^3.1.5",
     "ws": "^7.4.5"
   },
   "engines": {
-    "node": "12.14.1",
-    "npm": "6.13.4"
+    "node": "12.x"
   },
   "repository": {
-    "url": "https://github.com/popzoo/popseek.git"
+    "type": "git",
+    "url": "https://github.com/popzoo/popseek"
   },
-  "license": "GPL3.0",
+  "license": "MIT",
+  "author": "JadeBone",
   "keywords": [
     "node",
     "express"
