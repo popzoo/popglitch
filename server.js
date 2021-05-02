@@ -15,7 +15,7 @@ app.get("/login", (request, response) => {//https://firepage.glitch.me/
 });
 // send the default array of dreams to the webpage
 app.get("/dreams", (request, response) => {
-    addApiHead(res);
+    addApiHead(response);
     let dreams = {code:1,msg:getTimeInfo()+"kiss your vagina"};
     response.json(dreams);
 });
@@ -32,7 +32,7 @@ function addApiHead(res) {
     res.header("Pragma", "no-cache");
     res.header("Expires", 0);
 }
-// listen for requests :)
+// listen for requests 
 const listener = app.listen(process.env.PORT||3000, () => {
     console.log("Your app is listening on port " + listener.address().port);
 });
