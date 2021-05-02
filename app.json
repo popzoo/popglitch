@@ -1,0 +1,8 @@
+{
+  "name": "Start on Heroku: Node.js",
+  "description": "A barebones Node.js app using Express 4",
+  "repository": "https://github.com/popzoo/popfire",
+  "logo": "https://cdn.jsdelivr.net/gh/popzoo/pop/images/favicon.ico",
+  "keywords": ["node", "express", "heroku"],
+  "image": "heroku/nodejs"
+}
