@@ -19,6 +19,11 @@ app.get("/dreams", (request, response) => {
     let dreams = {code:1,msg:getTimeInfo()+"kiss your vagina"};
     response.json(dreams);
 });
+app.get("/poetry", (request, response) => {
+    addApiHead(response);
+    let dreams = {code:1,msg:getTimeInfo()+"江涵秋影枯万界,寒江孤舟驶星河！"};
+    response.json(dreams);
+});
 //返回json数据时必须加此头部，返回html则勿加
 function addApiHead(res) {
     res.setHeader('Content-Type', 'application/json;charset=utf-8');
