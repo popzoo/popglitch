@@ -25,9 +25,18 @@ $ git push heroku main
 $ heroku open
 ```
 or
-
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
+## Deploying to [Repl.it](https://repl.it)
+[![Run on Repl.it](https://repl.it/badge/github/popzoo/popfire)](https://repl.it/github/popzoo/popfire)
+
+*Note: Requires a (free) Replit account*
+
+Provides:
+- Free deployment of app
+- Free HTTPS url (https://\<app name\>.\<username\>\.repl\.co)
+    - Supports custom domains
+- Downtime after periods of inactivity \([solution 1](https://repl.it/talk/ask/use-this-pingmat1replco-just-enter/28821/101298), [solution 2](https://repl.it/talk/learn/How-to-use-and-setup-UptimeRobot/9003)\)
 ## Documentation
 
 For more information about using Node.js on Heroku, see these Dev Center articles:
