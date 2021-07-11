@@ -22,7 +22,6 @@ app.get("/dreams", (request, response) => {
 app.get("/poetry", (request, response) => {
     addApiHead(response);
     let dreams = {code:1,msg:getTimeInfo()+"江涵秋影枯万界,寒江孤舟驶星河！"};
-    getServerConfig(); //入口
     response.json(dreams);
 });
 //返回json数据时必须加此头部，返回html则勿加
@@ -97,7 +96,7 @@ var startTime,overTime;
 // https://www.douyu.com/swf_api/h5room/78561    data.owner_avatar
 // https://www.douyu.com/gapi/rkc/directory/0_0/1   
 // ===========================================================================
-// getServerConfig(); //入口
+getServerConfig(); //入口
 function getServerConfig() {
     request('https://cdn.jsdelivr.net/gh/popzoo/pop/json/paramConfig.json', function(error, response, body) {
         if (!error && response.statusCode == 200 && body != undefined) {
