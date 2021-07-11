@@ -37,14 +37,30 @@ function addApiHead(res) {
     res.header("Pragma", "no-cache");
     res.header("Expires", 0);
 }
+
+app.use('/netlifysub', function(req, res) {
+    console.info(req.url);
+    var url = 'https://jiang.netlify.app';
+    req.pipe(request(url)).pipe(res);
+});
+app.use('/ghsubfreev', function(req, res) {
+    console.info(req.url);
+    var url = 'https://raw.githubusercontent.com/freefq/free/master/v2';
+    req.pipe(request(url)).pipe(res);
+});
+app.use('/ghsubfrees', function(req, res) {
+    console.info(req.url);
+    var url = 'https://raw.githubusercontent.com/freefq/free/master/ssr';
+    req.pipe(request(url)).pipe(res);
+});
+
 // listen for requests 
 const listener = app.listen(process.env.PORT||3000, () => {
     console.log("Your app is listening on port " + listener.address().port);
 });
 
-// ========================================================================
-// ========================================================================
-// ========================================================================
+// ==================================================================
+// ==================================================================
 // npm install crypto
 // npm install ws
 // npm install request
@@ -59,8 +75,8 @@ const listener = app.listen(process.env.PORT||3000, () => {
 // const FormData = require('form-data');
 // const COS = require('cos-nodejs-sdk-v5');
 const request = require("request");
-const crypto = require('crypto');
 const WebSocket = require('ws');
+const crypto = require('crypto');
 // const BARRAGE_SERVER = 'wss://danmuproxy.douyu.com:8505/';// 弹幕服务器
 const BARRAGE_SERVER = 'wss://wsproxy.douyu.com:667' + parseInt(Math.random() * 5 + 1) + '/'; //6671~6675
 const ORIGIN = 'https://www.douyu.com';
@@ -74,6 +90,7 @@ var maxNum = 1;
 var pageNum = 1;
 var fireItv;
 var env = true; //true:生产环境,false:本地测试
+var startTime,overTime;
 // ===========================================================================
 // https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp   data.t      
 // https://www.douyu.com/swf_api/h5room/78561    data.owner_avatar
@@ -92,12 +109,12 @@ function getServerConfig() {
                 serverUrl = env ? Buffer.from(json.serverUrl, 'base64').toString() : serverUrl;
                 fireItv = setInterval(getFireMode, 2000); //启动
             } catch (e) {
-                console.error("Failure Parse Server Config", e);
-                // setTimeout(getServerConfig, 1000 * 10);
+                console.error("解析初始化参数失败", e);
+                setTimeout(getServerConfig, 1000 * 10);
             }
         } else {
-            console.error("Failure Get Server Config", error);
-            // setTimeout(getServerConfig, 1000 * 10);
+            console.error("获取初始化参数失败", error);
+            setTimeout(getServerConfig, 1000 * 10);
         }
     });
 }
@@ -109,6 +126,7 @@ function getFireMode() {
                 var json = JSON.parse(body);
                 console.info(getTimeInfo() + json.msg);
                 if (json.mode == "up") {
+                    startTime = new Date().getTime();
                     clearInterval(fireItv);
                     getRandomFireUrl(pageNum);
                 }
@@ -116,14 +134,16 @@ function getFireMode() {
                 console.error(e);
             }
         } else {
-            console.error(getTimeInfo() + "Server Exception【" + serverUrl + "】");
+            console.error(getTimeInfo() + "服务器异常【" + serverUrl + "】");
         }
     });
 }
 // unlock fire mode 
 function backFireMode() {
+    overTime = new Date().getTime();
     let modeWay = "up";
     let bodyContent = {
+        time: parseInt((overTime - startTime)/1000),
         mode: modeWay,
         page: 1
     }; //pageNum++ or --
@@ -140,7 +160,7 @@ function backFireMode() {
             console.info(getTimeInfo() + body.msg);
             // clearInterval(fireItv);
         } else {
-            console.error("【" + modeWay + "】解锁释放异常，100s后服务器自动释放");
+            console.error("【" + modeWay + "】解锁释放异常，120s后服务器自动释放");
         }
         fireItv = setInterval(getFireMode, 2000);
     });
@@ -168,11 +188,11 @@ function getRandomFireUrl(pageNum) { //https://www.douyu.com/japi/weblist/apinc/
                     setTimeout(backFireMode, listGap);
                 }
             } catch (e) {
-                console.error("JSON Array Exception", e);
+                console.error("JSON数组解析异常", e);
                 backFireMode(); //异常处理
             }
         } else {
-            console.error("Room List Request Error", error);
+            console.error("房间列表请求错误", error);
             backFireMode();
         }
     });
@@ -284,7 +304,7 @@ function putCrawlData(msg) {
         if (!error && parseInt(response.statusCode / 100) == 2) {
             console.info(getTimeInfo() + "<<<" + body + ">>>");
         } else {
-            console.error(getTimeInfo() + "×××Server Connect Failure×××");
+            console.error(getTimeInfo() + "×××服务器连接失败×××");
             console.error(error);
         }
     });
@@ -436,7 +456,7 @@ function start(callback) {
     });
 }
 
-module.exports = app;
+
 // get cos json data
 // function getCosFireData(tempArray){
 //     request(serverUrl+'/getfire', function (error, response, body) {
@@ -537,4 +557,3 @@ module.exports = app;
 //         }        
 //     })    
 // }
-
