@@ -18,7 +18,7 @@ $ npm start
 Your app should now be running on [localhost:5000](http://localhost:5000/).
 
 ## Deploying to Heroku
-
+app.json和procfile是部署heroku需要的文件
 ```
 $ heroku create
 $ git push heroku main
