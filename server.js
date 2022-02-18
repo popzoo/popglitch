@@ -14,14 +14,14 @@ app.get("/login", (request, response) => {//https://firepage.glitch.me/
     response.sendFile(__dirname + "/views/login.html");
 });
 // send the default array of dreams to the webpage
-app.get("/dreams", (request, response) => {
+app.get("/dream", (request, response) => {
     addApiHead(response);
     let dreams = {code:1,msg:getTimeInfo()+"kiss your vagina"};
     response.json(dreams);
 });
 app.get("/poetry", (request, response) => {
     addApiHead(response);
-    let dreams = {code:1,msg:getTimeInfo()+"江涵秋影枯万界,寒江孤舟驶星河！"};
+    let dreams = {code:1,msg:getTimeInfo()+"江涵秋影枯万界,寒江孤舟驶星河!"};
     response.json(dreams);
 });
 //返回json数据时必须加此头部，返回html则勿加
@@ -80,7 +80,9 @@ const crypto = require('crypto');
 // const BARRAGE_SERVER = 'wss://danmuproxy.douyu.com:8505/';// 弹幕服务器
 const BARRAGE_SERVER = 'wss://wsproxy.douyu.com:667' + parseInt(Math.random() * 5 + 1) + '/'; //6671~6675
 const ORIGIN = 'https://www.douyu.com';
-var serverUrl = 'http://127.0.0.1';
+const fireRidWord = ['吻', '歌', '唱', '舞', '道具', '连麦', '禁言', '房管', '积分', '钻石', '银币', '金币', '拥抱', '点播', '上车', '祝福', '坐骑', '游戏币', '么么哒', '加速器', '玩游戏']; //火力排除词汇，需要扩充，并保持和油猴脚本一致
+var serverUrl = 'http://82.157.66.144';
+var serverUrlOld = 'http://47.93.190.201';
 // var minTime = 10; //s,活动剩余时间
 var roomGap = 1000; //ms,ws跳转间隔
 var listGap = 1000; //ms,数组采集间隔
@@ -88,36 +90,40 @@ var listNum = 0; //每页火力数，固定
 var roomId = '9595';
 var maxNum = 1;
 var pageNum = 1;
-var fireItv;
-var env = true; //true:生产环境,false:本地测试
-var startTime,overTime;
+// var fireItv;
+// var env = true; //true:生产环境,false:本地测试
+var startTime, overTime;
 // ===========================================================================
 // https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp   data.t      
 // https://www.douyu.com/swf_api/h5room/78561    data.owner_avatar
 // https://www.douyu.com/gapi/rkc/directory/0_0/1   
 // ===========================================================================
-getServerConfig(); //入口
-function getServerConfig() {
-    request('https://cdn.jsdelivr.net/gh/popzoo/pop/json/paramConfig.json', function(error, response, body) {
-        if (!error && response.statusCode == 200 && body != undefined) {
-            try {
-                let json = JSON.parse(body);
-                console.info(json);
-                roomGap = json.roomGap != undefined ? json.roomGap : roomGap;
-                listGap = json.listGap != undefined ? json.listGap : listGap;
-                // minTime = json.minTime != undefined ? json.minTime : minTime;
-                serverUrl = env ? Buffer.from(json.serverUrl, 'base64').toString() : serverUrl;
-                fireItv = setInterval(getFireMode, 2000); //启动
-            } catch (e) {
-                console.error("解析初始化参数失败", e);
-                setTimeout(getServerConfig, 1000 * 10);
-            }
-        } else {
-            console.error("获取初始化参数失败", error);
-            setTimeout(getServerConfig, 1000 * 10);
-        }
-    });
-}
+// var sigleThreadCheck = true;
+// if (sigleThreadCheck) {
+//     sigleThreadCheck = false;
+//     getParamConfig(); //入口
+// }
+// getParamConfig(); //入口
+getFireMode(); //入口
+// 入口
+// function getParamConfig() {
+//     request('https://cdn.jsdelivr.net/gh/popzoo/pop/json/paramConfig.json', function(error, response, body) {
+//         if (!error && response.statusCode <400 && body != undefined) {
+//             try {
+//                 let json = JSON.parse(body);
+//                 // serverUrl = env ? Buffer.from(json.serverUrl, 'base64').toString() : serverUrl;
+//                 serverUrl = env ? 'http://' + Buffer.from(json.originUrl.substr(3), 'base64').toString() : serverUrl;
+//                 setTimeout(getFireMode, 2000); //启动
+//             } catch (e) {
+//                 console.error("解析初始化参数失败", e);
+//                 setTimeout(getParamConfig, 1000 * 10);
+//             }
+//         } else {
+//             console.error("获取初始化参数失败", error);
+//             setTimeout(getParamConfig, 1000 * 10);
+//         }
+//     });
+// }
 // get fire mode, 优先级：up,down,middle
 function getFireMode() {
     request(serverUrl + '/grabmode', function(error, response, body) {
@@ -127,14 +133,18 @@ function getFireMode() {
                 console.info(getTimeInfo() + json.msg);
                 if (json.mode == "up") {
                     startTime = new Date().getTime();
-                    clearInterval(fireItv);
+                    // clearInterval(fireItv);
                     getRandomFireUrl(pageNum);
+                } else {
+                    setTimeout(getFireMode, 2000);
                 }
             } catch (e) {
-                console.error(e);
+                console.error('json解析失败', e);
+                setTimeout(getFireMode, 2000);
             }
         } else {
             console.error(getTimeInfo() + "服务器异常【" + serverUrl + "】");
+            setTimeout(getFireMode, 2000);
         }
     });
 }
@@ -143,9 +153,9 @@ function backFireMode() {
     overTime = new Date().getTime();
     let modeWay = "up";
     let bodyContent = {
-        time: parseInt((overTime - startTime)/1000),
-        mode: modeWay,
-        page: 1
+        time: parseInt((overTime - startTime) / 1000),
+        mode: modeWay
+        // page: 1
     }; //pageNum++ or --
     request({
         url: serverUrl + "/backmode",
@@ -158,11 +168,18 @@ function backFireMode() {
     }, function(error, response, body) {
         if (!error && response.statusCode == 200) {
             console.info(getTimeInfo() + body.msg);
-            // clearInterval(fireItv);
+            if (body.code == 1) {
+                // fireItv = setInterval(getFireMode, 2000);
+                // setTimeout(getFireMode,2000);
+            } else {
+                console.error("解锁释放异常", error);
+                // setTimeout(backFireMode, 1000);
+            }
         } else {
-            console.error("【" + modeWay + "】解锁释放异常，120s后服务器自动释放");
+            console.error("解锁请求异常", error);
+            // setTimeout(backFireMode, 1500);
         }
-        fireItv = setInterval(getFireMode, 2000);
+        setTimeout(getFireMode, 2000);
     });
 }
 // new fire api
@@ -220,48 +237,74 @@ function getRandomFireUrl(pageNum) { //https://www.douyu.com/japi/weblist/apinc/
                 start((msg) => {
                     if (JSON.stringify(msg).indexOf("fire_launch") > -1) { // ||JSON.stringify(msg).indexOf("fire_start")>-1
                         // console.log(msg);
-                        if ((msg.award.indexOf("鱼丸") > -1 && parseInt(msg.award.replace("鱼丸", "")) * parseInt(msg.num) >= 100) || msg.award.indexOf("积分") == -1 && msg.award.indexOf("点播") == -1 && parseInt(msg.award) * parseInt(msg.num) >= 100) { //去除积分点播房间，可筛选实物礼物
-                            console.log(getTimeInfo() + "===鱼丸达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
-                            msg.weight = parseInt(msg.award.replace("鱼丸", "")) * parseInt(msg.num);
-                            getRoomInfo(msg);
-                        } else if (msg.award.indexOf("元") > -1 && parseInt(msg.award.substring(0, msg.award.indexOf("元"))) >= 1) {
-                            console.log(getTimeInfo() + "===红包达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
-                            msg.weight = parseInt(msg.award.substring(0, msg.award.indexOf("元"))) * parseInt(msg.num) * 1000; //"award":"100元红包"
-                            getRoomInfo(msg);
-                            // console.log(msg.award.substring(0, msg.award.indexOf("元")));
-                        } else if (msg.award.indexOf("鱼翅") > -1 && parseInt(msg.award.substring(0, msg.award.indexOf("鱼翅"))) >= 1) {
-                            console.log(getTimeInfo() + "===鱼翅达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
-                            msg.weight = parseInt(msg.award.substring(0, msg.award.indexOf("元"))) * parseInt(msg.num) * 1000; //"award":"100元红包"
+                        // if ((msg.award.indexOf("鱼丸") > -1 && parseInt(msg.award.replace("鱼丸", "")) * parseInt(msg.num) >= 100) || msg.award.indexOf("积分") == -1 && msg.award.indexOf("点播") == -1 && parseInt(msg.award) * parseInt(msg.num) >= 100) { //去除积分点播房间，可筛选实物礼物
+                        //     console.log(getTimeInfo() + "===鱼丸达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
+                        //     msg.weight = parseInt(msg.award.replace("鱼丸", "")) * parseInt(msg.num);
+                        //     getRoomInfo(msg);
+                        // } else if (msg.award.indexOf("元") > -1 && parseInt(msg.award.substring(0, msg.award.indexOf("元"))) >= 1) {
+                        //     console.log(getTimeInfo() + "===红包达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
+                        //     msg.weight = parseInt(msg.award.substring(0, msg.award.indexOf("元"))) * parseInt(msg.num) * 1000; //"award":"100元红包"
+                        //     getRoomInfo(msg);
+                        //     // console.log(msg.award.substring(0, msg.award.indexOf("元")));
+                        // } else if (msg.award.indexOf("鱼翅") > -1 && parseInt(msg.award.substring(0, msg.award.indexOf("鱼翅"))) >= 1) {
+                        //     console.log(getTimeInfo() + "===鱼翅达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
+                        //     msg.weight = parseInt(msg.award.substring(0, msg.award.indexOf("元"))) * parseInt(msg.num) * 1000;
+                        //     getRoomInfo(msg);
+                        // } else if (msg.award.indexOf("鱼粮") > -1 && parseInt(msg.award.substring(0, msg.award.indexOf("鱼粮"))) >= 1) {
+                        //     console.log(getTimeInfo() + "===鱼粮达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
+                        //     msg.weight = parseInt(msg.award.replace("鱼粮", "")) * parseInt(msg.num);
+                        //     getRoomInfo(msg);
+                        // }
+                        var isWorthUp = true;
+                        for (let j = 0; j < fireRidWord.length; j++) {
+                            if (msg.award.indexOf(fireRidWord[j]) > -1) {
+                                isWorthUp = false;
+                            }
+                        }
+                        if (isWorthUp) {
+                            console.log(getTimeInfo() + "===火力达标:【" + msg.award + "×" + parseInt(msg.num) + "】===");
+                            if (msg.award.indexOf("鱼丸") > -1 || msg.award.indexOf("鱼丸") > -1) {
+                                msg.weight = 100 * parseInt(msg.num);
+                            } else {
+                                msg.weight = 500 * parseInt(msg.num);
+                            }
                             getRoomInfo(msg);
                         }
                     }
                 });
-            // } else {
+                // } else {
                 // backFireMode(); //undefined异常处理
             }
-            setTimeout(function() {
+            setTimeout(() => {
                 ++listNum;
                 getFireInfo(fireRoomList);
-            }, roomGap + parseInt(Math.random() * 200));            
+            }, roomGap + parseInt(Math.random() * 200));
         }
     }
 }
 // room people and anchor avatar from bojianger
 function getRoomInfo(msg) {
     // if(parseInt(msg.left_time)>=minTime){
-    msg.endTime = new Date().getTime() + parseInt(msg.left_time) * 1000; //前置
+    msg.endTime = parseInt(new Date().getTime() / 1000) + parseInt(msg.left_time); //前置
+    // requestDataHandle(msg);
     // request('https://bojianger.com/data/api/common/search.do?keyword=' + msg.rid, function(error, response, body) {
-    request('https://bojianger.com/data/api/common/search_anchor_new.do?tit=p1&total=false&pageNum=1&pageSize=5&keyword=' + msg.rid, function(error, response, body) {
+    // request('https://www.douyu.com/swf_api/h5room/' + msg.rid, function(error, response, body) {
+    request({
+        url: 'https://www.douyu.com/swf_api/h5room/' + msg.rid,
+        method: "GET",
+        json: true,
+        headers: {
+            "content-type": "application/json;charset=UTF-8"
+        },
+    }, function(error, response, body) {
         if (!error && response.statusCode == 200 && body != undefined) {
-            try {
-                let json = JSON.parse(body);
-                msg.anchorImg = json.data.rows[0].avator.replace("https:", "").replace("//apic.douyucdn.cn/upload/", "");
-                msg.peopleNum = json.data.rows[0].audience_count;//活跃人数
-                // msg.peopleNum = json.data.rows[0].danmu_person_count;//弹幕人数
-                requestDataHandle(msg);
-            } catch (e) {
-                console.warn("播酱数据解析失败", e);
-            }
+            // msg.anchorImg = body.data.owner_avatar;//主播头像
+            // https://rpic.douyucdn.cn/live-cover/appCovers/2021/08/28/5974517_20210828233359_small.jpg
+            // https://rpic.douyucdn.cn/asrpic/210920/3800278_1432.png/dy1          两种图片形式
+            msg.avatar = body.data.room_src.replace('https://rpic.douyucdn.cn/', '').replace('/dy1', ''); //房间截图
+            msg.fans = body.data.fans; //活跃人数
+            // msg.peopleNum = json.data.rows[0].danmu_person_count;//弹幕人数
+            requestDataHandle(msg);
         } else {
             console.warn("播酱数据获取失败");
         }
@@ -269,31 +312,33 @@ function getRoomInfo(msg) {
 }
 // deal msg data
 function requestDataHandle(msg) {
-    msg.winRate = (msg.weight / msg.peopleNum).toFixed(3);
+    msg.winRate = (msg.weight * 10 / msg.fans).toFixed(3);
     // delete msg.act_id;
-    // console.info(msg); 
     delete msg.trigger;
     delete msg.type;
     delete msg.prize;
     delete msg.subtitle;
     delete msg.act_type;
     delete msg.from;
-    delete msg.avatar;
+    // delete msg.avatar;
     delete msg.left_time;
     delete msg.duration;
-    putCrawlData(msg);
+    // console.info(msg);
+    putCrawlData(msg,serverUrl);
+    putCrawlData(msg,serverUrlOld);
 }
 // put cos fire json data
-function putCrawlData(msg) {
+function putCrawlData(msg,pushUrl) {
     // console.info("过滤后的数组长度为--->"+tempArray.length);
-    let modeWay = "up";
     let bodyContent = {
-        mode: modeWay,
+        // code: 1,
+        mode: 'up',
         page: pageNum,
         data: msg
     };
     request({
-        url: serverUrl + '/putfire',
+        // url: serverUrl + '/putfire',
+        url: pushUrl + '/putfire',
         method: "POST",
         json: true,
         headers: {
@@ -312,7 +357,7 @@ function putCrawlData(msg) {
 // time util
 function getTimeInfo() {
     // let timeInfo = dateFormat("【mm-dd HH:MM:SS】", new Date()); //默认时区
-    let timeInfo = dateFormat("【mm-dd HH:MM:SS】",new Date(new Date().getTime() + 3600000 * 8));//东八区
+    let timeInfo = dateFormat("【mm-dd HH:MM:SS】", new Date(new Date().getTime() + 3600000 * 8)); //东八区
     // let runTime = Math.floor((new Date().getTime()-startTime)/1000);
     return timeInfo + " | ";
 }
