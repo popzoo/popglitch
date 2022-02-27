@@ -17,21 +17,21 @@ app.use(express.static("public"));
 //     }
 // });
 app.all("/", (req, res) => {
-    addApiHead(res, 3);
+    addApiHead(res, true, 3);
     return res.sendFile(__dirname + "/index.html");
 });
 app.get("/login", (req, res) => {
-    addApiHead(res, 3);
+    addApiHead(res, true, 3);
     return res.sendFile(__dirname + "/views/login.html");
 });
 // send the default array of dreams to the webpage
 app.get("/dream", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let dreams = { code: 1, msg: "kiss your red face!" };
     return res.json(dreams);
 });
 app.all("/poetry", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let dreams = {
         code: 1,
         msg: "江涵秋影枯万界,寒江孤舟驶星河!",
@@ -40,51 +40,57 @@ app.all("/poetry", (req, res) => {
 });
 // ====================================================================
 // ====================================================================
-app.use("/netlifysub", function (req, res) {
-    addApiHead(res, 2);
+app.get("/netlifysub", function (req, res) {
+    addApiHead(res, false, 2);
     console.info(req.url);
     var url = "https://jiang.netlify.app";
     return req.pipe(request(url)).pipe(res);
 });
-app.use("/ghsubfreev", function (req, res) {
-    addApiHead(res, 2);
+app.get("/ghsubfreev", function (req, res) {
+    addApiHead(res, false, 2);
     console.info(req.url);
     var url = "https://raw.githubusercontent.com/freefq/free/master/v2";
     return req.pipe(request(url)).pipe(res);
 });
-app.use("/ghsubfrees", function (req, res) {
-    addApiHead(res, 2);
+app.get("/ghsubfrees", function (req, res) {
+    addApiHead(res, false, 2);
     console.info(req.url);
     var url = "https://raw.githubusercontent.com/freefq/free/master/ssr";
     return req.pipe(request(url)).pipe(res);
 });
-app.get("/initparam", function (req, res) {
-    addApiHead(res, 1);
+app.get("/ghyusteven", function (req, res) {
+    addApiHead(res, false, 2);
+    console.info(req.url);
+    var url = "https://raw.githubusercontent.com/git-yusteven/openit/main/long";
+    return req.pipe(request(url)).pipe(res);
+});
+app.use("/initparam", function (req, res) {
+    addApiHead(res, false, 1);
     console.info(req.url);
     var url =
         "https://raw.githubusercontent.com/popzoo/pop/master/json/paramConfig.json";
     return req.pipe(request(url)).pipe(res);
 });
-app.get("/ladder", function (req, res) {
-    addApiHead(res, 2);
-    console.info(req.url);
-    var url = process.env.pipeUrl + '/getladder';
-    return req.pipe(request(url)).pipe(res);
-});
-app.get("/quantum", function (req, res) {
-    addApiHead(res, 2);
-    console.info(req.url);
-    var url = process.env.pipeUrl + '/getquantum';
-    return req.pipe(request(url)).pipe(res);
-});
+// app.get("/ladder", function (req, res) {
+//     addApiHead(res,false, 2);
+//     console.info(req.url);
+//     var url = process.env.pipeUrl + '/getladder';
+//     return req.pipe(request(url)).pipe(res);
+// });
+// app.get("/quantum", function (req, res) {
+//     addApiHead(res,false, 2);
+//     console.info(req.url);
+//     var url = process.env.pipeUrl + '/getquantum';
+//     return req.pipe(request(url)).pipe(res);
+// });
 // ========================================================================
 // ========================================================================
 // ========================================================================
 const CryptoJS = require("crypto-js");
 const jwtToken = process.env.jwtToken;
-const xnmHostUrl = process.env.xnmHostUrl;
+const xnmHostUrl = 'https://' + process.env.xnmHost + '/OpenAPI/v1';
 const header = {
-    'Host': 'lvsfbqec.shdkw1o.com',
+    'Host': process.env.xnmHost,
     'Connection': 'close',
     'authorization': 'Bearer ' + jwtToken,
     'Accept-Encoding': 'gzip, deflate',
@@ -96,7 +102,7 @@ const header = {
 }
 // # 获取apk版本号码
 app.use("/api/appver", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let requrl = xnmHostUrl + '/config/getliteversion';
     request({
         url: requrl,
@@ -116,7 +122,7 @@ app.use("/api/appver", (req, res) => {
 });
 //  # 获取配置静态域名
 app.use("/api/appconf", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let requrl = xnmHostUrl + '/config/getappconfig';// ?platform=ios
     request({
         url: requrl,
@@ -136,7 +142,7 @@ app.use("/api/appconf", (req, res) => {
 });
 // # 获取最热列表  >100
 app.use("/api/hot", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let page = req.query.page != null ? req.query.page : 1;
     let requrl = xnmHostUrl + '/anchor/hot?page=' + page + '&size=100&order=time';
     request({
@@ -163,7 +169,7 @@ app.use("/api/hot", (req, res) => {
 });
 // # 获取最新列表  <10
 app.use("/api/latest", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let requrl = xnmHostUrl + '/anchor/latest?page=1&size=50&order=time';
     request({
         url: requrl,
@@ -189,7 +195,7 @@ app.use("/api/latest", (req, res) => {
 });
 // # 获取附近列表
 app.use("/api/nearby", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let page = req.query.page != null ? req.query.page : 1;
     let requrl = xnmHostUrl + '/anchor/nearby?page=' + page + '&size=50&order=time';
     request({
@@ -216,7 +222,7 @@ app.use("/api/nearby", (req, res) => {
 });
 // # 获取颜值列表
 app.use("/api/vegan", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let requrl = xnmHostUrl + '/anchor/vegan?page=1&size=100&order=time';//isPk=0
     request({
         url: requrl,
@@ -242,7 +248,7 @@ app.use("/api/vegan", (req, res) => {
 });
 // # 获取颜值列表
 app.use("/api/vip", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let requrl = xnmHostUrl + '/anchor/vip?page=1&size=50&order=time';
     request({
         url: requrl,
@@ -267,14 +273,13 @@ app.use("/api/vip", (req, res) => {
     })
 });
 // # 返回房间的html文件
-app.use("/room", (req, res) => {
-    res.header("Content-Type", "text/html;charset=utf-8");
-    res.header("Cache-Control", "max-age=3600"); //缓存的内容将在1800秒后失效（单位是秒）
+app.use("/room", (req, res) => {//use为模糊匹配路由
+    addApiHead(res, true, 3);
     return res.sendFile(__dirname + "/public/detail.html");
 });
 // # 获取rtmp加密数据
 app.use("/api/stream", (req, res) => {
-    addApiHead(res, 1);
+    addApiHead(res, false, 1);
     let requrl = xnmHostUrl + '/private/getPrivateLimit';
     request({
         url: requrl + '?uid=' + req.query.uid,
@@ -316,7 +321,7 @@ app.all('*', (req, res) => {
     return res.sendFile(__dirname + '/public/404.html');
 });
 //返回json数据时加此头部,node原生的res.setHeader()仅允许您设置单个标头，而express框架的res.header()仅允许您设置多个标头
-function addApiHead(res, ctype) {
+function addApiHead(res, isCached, ctype) {
     if (ctype == 1) {
         res.header("Content-Type", "application/json;charset=utf-8");
     } else if (ctype == 2) {
@@ -332,9 +337,15 @@ function addApiHead(res, ctype) {
     res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
     res.header("X-Powered-By", "nodejs"); //自定义头信息，表示服务端用nodejs
     // 控制缓存
-    res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.header("Pragma", "no-cache");
-    res.header("Expires", 0);
+    if (isCached) {
+        res.header("Cache-Control", "max-age=1800"); //缓存的内容将在1800秒后失效（单位是秒）
+        res.header("Expires", 1800); //效果同上，优先级弱于max-age,如上者存在，则被覆盖           
+    } else {
+        res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.header("Pragma", "no-cache");
+        res.header("Expires", 0);
+    }
+
 }
 
 fireCrawl();//调用firecrawl模块
