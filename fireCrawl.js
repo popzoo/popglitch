@@ -19,7 +19,6 @@ const crypto = require('crypto');
 const BARRAGE_SERVER = 'wss://wsproxy.douyu.com:667' + parseInt(Math.random() * 5 + 1) + '/'; //6671~6675
 const ORIGIN = 'https://www.douyu.com';
 const fireRidWord = ['吻', '歌', '唱', '舞', '道具', '连麦', '禁言', '房管', '积分', '钻石', '银币', '金币', '拥抱', '点播', '上车', '祝福', '坐骑', '游戏币', '么么哒', '加速器', '玩游戏']; //火力排除词汇，需要扩充，并保持和油猴脚本一致
-const platform = process.env.platform != null ? process.env.platform : '未知';
 var serverUrl = 'http://127.0.0.1';
 // var minTime = 10; //s,活动剩余时间
 var roomGap = 1000; //ms,ws跳转间隔
@@ -30,8 +29,9 @@ var roomId = '9595';
 var maxPage = 1;
 var currPage = 1;
 // var fireItv;
-var env = true; //true:生产环境,false:本地测试
+const env = true; //true:生产环境,false:本地测试
 var startTime, overTime, monitorTime;
+const platform = process.env.platform != null ? process.env.platform : (env ? 'none' : 'local');
 // ===========================================================================
 // https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp   data.t      
 // https://www.douyu.com/swf_api/h5room/78561    data.owner_avatar
