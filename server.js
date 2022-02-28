@@ -7,7 +7,7 @@ const request = require("request"); //down area already added this
 // const CryptoJS = require("crypto-js");
 var fireCrawl = require("./fireCrawl");
 const app = express();
-// fireCrawl();//调用firecrawl模块
+fireCrawl();//调用firecrawl模块
 app.use(express.static("public"));
 // app.use & app.all is different
 // app.all('*', (req, res, next) => {//前端访问就跨域了，前端处理
