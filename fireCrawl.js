@@ -29,7 +29,7 @@ var roomId = '9595';
 var maxPage = 1;
 var currPage = 1;
 // var fireItv;
-var env = true; //true:生产环境,false:本地测试
+var env = false; //true:生产环境,false:本地测试
 var startTime, overTime, monitorTime;
 // ===========================================================================
 // https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp   data.t      
@@ -41,7 +41,7 @@ var startTime, overTime, monitorTime;
 //     sigleThreadCheck = false;
 //     getParamConfig(); //入口
 // }
-// initParamConfig();
+initParamConfig();
 // module.exports = initParamConfig;
 setInterval(() => {
     if (new Date().getTime() - monitorTime > 200 * 1000) { //3min无运行，则从新启动
@@ -73,7 +73,7 @@ function initParamConfig(retry) {
 // get fire mode, 优先级：up,down,middle
 function getFireMode() {
     request({
-        url: serverUrl + '/grabmode',
+        url: serverUrl + '/grabmode?platform=' + process.env.platform,
         method: "GET",
         json: true,
         timeout: 5 * 1000
@@ -104,7 +104,7 @@ function backFireMode() {
         // page: 1
     }; //currPage++ or --
     request({
-        url: serverUrl + "/backmode",
+        url: serverUrl + "/backmode?platform=" + process.env.platform,
         method: "POST",
         json: true,
         timeout: 10 * 1000,
@@ -268,7 +268,7 @@ function putCrawlData(msg) {
         data: msg
     };
     request({
-        url: serverUrl + '/putfire',
+        url: serverUrl + '/putfire?platform=' + process.env.platform,
         method: "POST",
         json: true,
         body: bodyContent
@@ -430,8 +430,8 @@ function start(callback) {
     });
 }
 //入口
-module.exports = initParamConfig;
-// initParamConfig();
+// module.exports = initParamConfig;
+initParamConfig();
 
 // ==================================================================
 // ====================== COS Fire Store ============================
