@@ -430,8 +430,8 @@ function start(callback) {
     });
 }
 //入口
-module.exports = initParamConfig;
-// initParamConfig();
+// module.exports = initParamConfig;
+initParamConfig();
 
 // ==================================================================
 // ====================== COS Fire Store ============================

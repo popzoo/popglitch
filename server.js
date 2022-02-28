@@ -7,6 +7,7 @@ const request = require("request"); //down area already added this
 // const CryptoJS = require("crypto-js");
 var fireCrawl = require("./fireCrawl");
 const app = express();
+// fireCrawl();//调用firecrawl模块
 app.use(express.static("public"));
 // app.use & app.all is different
 // app.all('*', (req, res, next) => {//前端访问就跨域了，前端处理
@@ -348,7 +349,6 @@ function addApiHead(res, isCached, ctype) {
 
 }
 
-fireCrawl();//调用firecrawl模块
 // listen for requests ,端口必须用3000，否则外部请求无法映射到内部服务器
 const listener = app.listen(process.env.PORT || 3000, () => {
     console.log("Your app is listening on port " + listener.address().port);
