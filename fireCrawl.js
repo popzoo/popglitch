@@ -36,13 +36,6 @@ var startTime, overTime, monitorTime;
 // https://www.douyu.com/swf_api/h5room/78561    data.owner_avatar
 // https://www.douyu.com/gapi/rkc/directory/0_0/1   
 // ===========================================================================
-// var sigleThreadCheck = true;
-// if (sigleThreadCheck) {
-//     sigleThreadCheck = false;
-//     getParamConfig(); //入口
-// }
-initParamConfig();
-// module.exports = initParamConfig;
 setInterval(() => {
     if (new Date().getTime() - monitorTime > 200 * 1000) { //3min无运行，则从新启动
         getFireMode();
@@ -430,8 +423,8 @@ function start(callback) {
     });
 }
 //入口
-// module.exports = initParamConfig;
-initParamConfig();
+module.exports = initParamConfig;
+// initParamConfig();
 
 // ==================================================================
 // ====================== COS Fire Store ============================
