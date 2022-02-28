@@ -29,7 +29,7 @@ var roomId = '9595';
 var maxPage = 1;
 var currPage = 1;
 // var fireItv;
-var env = false; //true:生产环境,false:本地测试
+var env = true; //true:生产环境,false:本地测试
 var startTime, overTime, monitorTime;
 // ===========================================================================
 // https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp   data.t      
