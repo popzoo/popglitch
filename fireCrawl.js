@@ -18,7 +18,7 @@ const crypto = require('crypto');
 // const BARRAGE_SERVER = 'wss://danmuproxy.douyu.com:8505/';// 弹幕服务器
 const BARRAGE_SERVER = 'wss://wsproxy.douyu.com:667' + parseInt(Math.random() * 5 + 1) + '/'; //6671~6675
 const ORIGIN = 'https://www.douyu.com';
-const fireRidWord = ['吻', '歌', '唱', '舞', '道具', '连麦', '禁言', '房管', '积分', '钻石', '银币', '金币', '拥抱', '点播', '上车', '解答', '车位', '祝福', '坐骑', 'cdk', '首胜', '抱一抱', '游戏币', '么么哒', '加速器', '玩游戏', '一起游戏']; //火力排除词汇，需要扩充，并保持和油猴脚本一致
+var FSFilter = ['吻', '歌', '唱', '舞']; //火力排除词汇由param控制
 var serverUrl = 'http://127.0.0.1';
 // var minTime = 10; //s,活动剩余时间
 var roomGap = 1000; //ms,ws跳转间隔
@@ -52,6 +52,7 @@ function initParamConfig(retry) {
     }, function (error, response, body) {
         if (!error && response.statusCode < 400 && body != undefined) {
             serverUrl = env ? 'http://' + Buffer.from(body.originUrl.substr(3), 'base64').toString() : serverUrl;
+            FSFilter = body.FSFilter;
             // console.info('serverUrl---->' + serverUrl);
             getFireMode();
         } else {
@@ -186,8 +187,8 @@ function getRandomFireUrl(currPage) { //https://www.douyu.com/japi/weblist/apinc
                         //     getRoomInfo(msg);
                         // }
                         var isWorthUp = true;
-                        for (let j = 0; j < fireRidWord.length; j++) {
-                            if (msg.award.indexOf(fireRidWord[j]) > -1) {
+                        for (let j = 0; j < FSFilter.length; j++) {
+                            if (msg.award.indexOf(FSFilter[j]) > -1) {
                                 isWorthUp = false;
                             }
                         }
