@@ -29,9 +29,9 @@ var roomId = '9595';
 var maxPage = 1;
 var currPage = 1;
 // var fireItv;
-const env = true; //true:生产环境,false:本地测试
+// const env = true; //true:生产环境,false:本地测试
 var startTime, overTime, monitorTime;
-const platform = process.env.platform != null ? process.env.platform : (env ? 'none' : 'local');
+const platform = process.env.platform != null ? process.env.platform : 'local';
 // ===========================================================================
 // https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp   data.t      
 // https://www.douyu.com/swf_api/h5room/78561    data.owner_avatar
@@ -51,7 +51,8 @@ function initParamConfig(retry) {
         timeout: 5 * 1000
     }, function (error, response, body) {
         if (!error && response.statusCode < 400 && body != undefined) {
-            serverUrl = env ? 'http://' + Buffer.from(body.originUrl.substr(3), 'base64').toString() : serverUrl;
+            // serverUrl = env ? 'http://' + Buffer.from(body.originUrl.substr(3), 'base64').toString() : serverUrl;
+            serverUrl = platform == 'local' ? 'http://' + Buffer.from(body.originUrl.substr(3), 'base64').toString() : Buffer.from(body.mirrorUrl, 'base64').toString();
             FSFilter = body.FSFilter;
             // console.info('serverUrl---->' + serverUrl);
             getFireMode();
