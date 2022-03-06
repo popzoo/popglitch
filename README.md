@@ -1,5 +1,7 @@
 # Glitch_nodejs_app
-## This Project Can Deploy to Heroku, Glitch and Koyeb
+## This Project Can Deploy to Heroku, Koyeb, Glitch and Replit
+### Heroku and koyeb can deploy directly.
+### Glitch and Replit should open panal to change code online.
 A barebones Node.js app using [Express 4](http://expressjs.com/).
 
 This application supports the [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
