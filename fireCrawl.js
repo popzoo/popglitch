@@ -23,7 +23,7 @@ var serverUrl = 'http://127.0.0.1';
 // var minTime = 10; //s,活动剩余时间
 var roomGap = 1000; //ms,ws跳转间隔
 var listGap = 1000; //ms,数组采集间隔
-var grabGap = 3000; //ms grabmode间隔
+var grabGap = 4000; //ms grabmode间隔
 var listNum = 0; //每页火力数，固定
 var roomId = '9595';
 var maxPage = 1;
@@ -52,6 +52,7 @@ function initParamConfig(retry) {
     }, function (error, response, body) {
         if (!error && response.statusCode < 400 && body != undefined) {
             // serverUrl = env ? 'http://' + Buffer.from(body.originUrl.substr(3), 'base64').toString() : serverUrl;
+            // 国内本地上传直接用ip，国外则用vercel上传，防止特殊时期切断网络
             serverUrl = platform == 'local' ? 'http://' + Buffer.from(body.originUrl.substr(3), 'base64').toString() : Buffer.from(body.mirrorUrl, 'base64').toString();
             FSFilter = body.FSFilter;
             // console.info('serverUrl---->' + serverUrl);
@@ -274,6 +275,7 @@ function putCrawlData(msg) {
         } else {
             console.error(getTimeInfo() + "×××服务器连接失败×××", error);
         }
+        monitorTime = new Date().getTime();
     });
 }
 // ======================================================================
