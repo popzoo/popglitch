@@ -1,9 +1,8 @@
-# Glitch_nodejs_app
-## This Project Can Deploy to Heroku, Koyeb, Glitch and Replit
+# NodeJS APP (Fire Scrapter)
+## This Project Can Deploy to Heroku, Koyeb, Glitch and Replit (LeanCloud partly)
 ### Heroku and koyeb can deploy directly.
-### Glitch and Replit should open panal to change code online(need obfuscator).
+### Glitch and Replit should open panal to change code online (need obfuscator).
 A barebones Node.js app using [Express 4](http://expressjs.com/).
-
 This application supports the [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
 
 ## Running Locally
@@ -20,6 +19,7 @@ $ npm start
 Your app should now be running on [localhost:5000](http://localhost:5000/).
 
 ## Deploying to Heroku
+
 其中app.json和procfile是部署heroku需要的文件
 ```
 $ heroku create
