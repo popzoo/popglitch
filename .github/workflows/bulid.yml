@@ -26,5 +26,7 @@ jobs:
       - name: Commit RENEW changes
         run: |
           git add RENEW.md
+          git config --global user.email "lvlanxing@gmail.com"
+          git config --global user.name "popzoo"          
           git commit -m 'update RENEW' || exit 0
           git push
