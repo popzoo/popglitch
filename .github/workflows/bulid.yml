@@ -1,0 +1,19 @@
+name: build
+on:
+  # push:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 8 */7 * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Commit RENEW changes
+        run: |
+          git add RENEW.md
+          git commit -m 'update RENEW' || exit 0
+          git push
