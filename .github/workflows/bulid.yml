@@ -3,7 +3,7 @@ on:
   # push:
   workflow_dispatch:
   schedule:
-    - cron:  '0 8 */7 * *'
+    - cron:  '0 0 * * 6'
 
 jobs:
   build:
@@ -11,6 +11,17 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2-beta
+        with: 
+          node-version: '14'
+
+      #- name: Install packages
+      #  run: npm install
+
+      - name: (Re)build RENEW
+        run: npm --silent run build > RENEW.md
 
       - name: Commit RENEW changes
         run: |
