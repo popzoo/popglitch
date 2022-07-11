@@ -1,7 +1,14 @@
-function currentDate(){
-    let dateStr = getTimeInfo(false);
-    console.info('更新时间'+dateStr);
-    return '更新时间'+ dateStr;
+const https = require('https');
+const barkKey = 'https://api.day.app/rBvsC5fAjauLmXSs8ip5V';
+
+
+function currentDate() {
+    let dateStr = '/📲POPGitch自动更新📲/ \r';
+    dateStr += getTimeInfo(false) +' \r';
+    dateStr += '自动更新部署平台：RailWay,Heroku,Koyeb \r';
+    dateStr += '需手动部署平台：Glitch,Replit,LeanCloud \r';
+    console.info(dateStr);
+    return dateStr;
 }
 // time util
 function getTimeInfo(isShort) {
@@ -31,4 +38,23 @@ function dateFormat(fmt, date) {
     };
     return fmt;
 }
-currentDate();
+
+function sendMsg() {
+    let hookAddr = barkKey + encodeURI(currentDate());
+    https.get(hookAddr, res => {
+        // console.info(res.statusCode);
+        let list = [];
+        res.on('data', chunk => {
+            list.push(chunk);
+        });
+        res.on('end', () => {
+            let data = JSON.parse(Buffer.concat(list).toString());
+            console.info(data);
+        });
+        console.info("推送成功");
+    }).on('error', err => {
+        console.error('Error: ', err.message);
+        console.error("推送失败");
+    });
+}
+sendMsg();
