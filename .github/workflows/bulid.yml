@@ -17,8 +17,8 @@ jobs:
         with: 
           node-version: '14'
 
-      #- name: Install packages
-      #  run: npm install
+      - name: Install packages
+        run: npm install
 
       - name: (Re)build RENEW
         run: npm --silent run renew > RENEW.md
