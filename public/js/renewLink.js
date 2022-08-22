@@ -102,12 +102,12 @@
     }
     // const live2d_path = "https://file.popzoo.ga/https://raw.githubusercontent.com/popsee/live2d-all/main/";
     // const live2d_path = "https://door.popsee.ga/https/cdn.jsdelivr.net/gh/popsee/live2d-all/";//跨域
-    const live2d_path = "https://popzoo.glitch.me/live2d/";//跨域
+    const live2d_path = "https://popfire-popsee.koyeb.app/live2d/";//跨域
     // const live2d_path = "./live2d-all/";
     if (screen.width >= 768 && document.URL.indexOf('bi.html') == -1) { //手机窄屏不显示live2d
         Promise.all([
             // loadExternalResource("https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css", "css"), //图标加载
-            loadExternalResource("https://popzoo.glitch.me/npm/font-awesome@4.7.0/css/font-awesome.min.css", "css"), //图标加载
+            loadExternalResource("https://popfire-popsee.koyeb.app/npm/font-awesome@4.7.0/css/font-awesome.min.css", "css"), //图标加载
             loadExternalResource(live2d_path + "font-awesome.min.css", "css"), //图标加载
             loadExternalResource(live2d_path + "waifu.css", "css"),
             loadExternalResource(live2d_path + "live2d.min.js", "js"),
