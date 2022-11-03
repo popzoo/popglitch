@@ -1,8 +1,0 @@
-{
-    "node": "16",
-    "container": {
-      "node": "16",
-      "port": 3000
-    },
-    "hardReloadOnChange": false
-  }
