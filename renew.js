@@ -1,12 +1,14 @@
-const https = require('https');
-const barkKey = 'https://api.day.app/rBvsC5fAjauLmXSs8ip5V';
-
+// const https = require('https');
+// const barkKey = 'https://api.day.app/rBvsC5fAjauLmXSs8ip5V';
+const request = require("request");
 
 function currentDate() {
-    let dateStr = '/📲POPGitch自动更新📲/ \r';
-    dateStr += getTimeInfo(false) +' \r';
-    dateStr += '自动更新部署平台：RailWay,Heroku,Koyeb \r';
-    dateStr += '需手动部署平台：Glitch,Replit,LeanCloud \r';
+    let dateStr = '📲POPGitch自动更新📲 \n';
+    dateStr += getTimeInfo(false) +' \n';
+    dateStr += '自动更新部署平台：Flyio, Koyeb, Heroku \n';
+    dateStr += '需手动部署平台：Glitch, Replit, Dragon \n';
+    dateStr += '已废弃用平台：RailWay, LeanCloud \n';
+    dateStr += '备胎候选平台：Render, NorthFlank \n';
     console.info(dateStr);
     return dateStr;
 }
@@ -38,23 +40,51 @@ function dateFormat(fmt, date) {
     };
     return fmt;
 }
-
-function sendMsg() {
-    let hookAddr = barkKey + encodeURI(currentDate());
-    https.get(hookAddr, res => {
-        // console.info(res.statusCode);
-        let list = [];
-        res.on('data', chunk => {
-            list.push(chunk);
-        });
-        res.on('end', () => {
-            let data = JSON.parse(Buffer.concat(list).toString());
-            console.info(data);
-        });
-        console.info("推送成功");
-    }).on('error', err => {
-        console.error('Error: ', err.message);
-        console.error("推送失败");
+// push msg
+function pushTGBot(text) {
+    const BOT_TOKEN = "5250809169:AAFcfyeZHMF_oYDm15DDu2kMIacI9wIEjBc";
+    const CHAT_ID = "1892620917";
+    let url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage";
+    // let url = "https://tele.popsee.ga/bot" + BOT_TOKEN + "/sendMessage";
+    request({
+        url: url,
+        method: "POST",
+        json: true,
+        headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.74"
+        },
+        form: {
+            'chat_id': CHAT_ID,
+            'parse_mode': 'Markdown',
+            'text': currentDate()
+        }
+    }, function (error, response, body) {
+        if (!error && response.statusCode < 400 && body != undefined) {
+            console.info(body);
+        } else {
+            console.error("TGBot PUSH Failure", error);
+        }
     });
-}
-sendMsg();
+}    
+pushTGBot();
+
+// function sendMsg() {
+//     let hookAddr = barkKey + encodeURI(currentDate());
+//     https.get(hookAddr, res => {
+//         // console.info(res.statusCode);
+//         let list = [];
+//         res.on('data', chunk => {
+//             list.push(chunk);
+//         });
+//         res.on('end', () => {
+//             let data = JSON.parse(Buffer.concat(list).toString());
+//             console.info(data);
+//         });
+//         console.info("推送成功");
+//     }).on('error', err => {
+//         console.error('Error: ', err.message);
+//         console.error("推送失败");
+//     });
+// }
+// sendMsg();
