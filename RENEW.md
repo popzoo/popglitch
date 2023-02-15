@@ -1,5 +1,5 @@
 📲POPGitch自动更新📲 
-【2023-02-01 09:15:20】 
+【2023-02-15 09:09:31】 
 自动更新部署平台：Flyio, Koyeb, Heroku 
 需手动部署平台：Glitch, Replit, Dragon 
 已废弃用平台：RailWay, LeanCloud 
@@ -8,7 +8,7 @@
 {
   ok: true,
   result: {
-    message_id: 2452,
+    message_id: 2599,
     from: {
       id: 5250809169,
       is_bot: true,
@@ -22,9 +22,9 @@
       username: 'lvlanxing',
       type: 'private'
     },
-    date: 1675214120,
+    date: 1676423371,
     text: '📲POPGitch自动更新📲 \n' +
-      '【2023-02-01 09:15:20】 \n' +
+      '【2023-02-15 09:09:31】 \n' +
       '自动更新部署平台：Flyio, Koyeb, Heroku \n' +
       '需手动部署平台：Glitch, Replit, Dragon \n' +
       '已废弃用平台：RailWay, LeanCloud \n' +
