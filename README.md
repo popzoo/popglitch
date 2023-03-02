@@ -16,7 +16,6 @@ This application supports the [Getting Started on Heroku with Node.js](https://d
 [![Run on Google Cloud](https://raw.githubusercontent.com/BinBashBanana/deploy-buttons/master/buttons/remade/googlecloud.svg)](https://deploy.cloud.run/?git_repo=https://github.com/popzoo/popglitch)
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Fpopzoo%2Fpopglitch)
-
 [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&repository=github.com/popzoo/popglitch&branch=main&name=popglitch&run_command=npm%start)
 
 ## Running Locally
