@@ -5,9 +5,9 @@ const request = require("request");
 function currentDate() {
     let dateStr = '📲POPGitch自动更新📲 \n';
     dateStr += getTimeInfo(false) +' \n';
-    dateStr += '自动更新部署平台：Flyio, Koyeb, Heroku \n';
-    dateStr += '需手动部署平台：Glitch, Replit, Dragon \n';
-    dateStr += '已废弃用平台：RailWay, LeanCloud \n';
+    dateStr += '自动更新部署平台：Koyeb \n';
+    dateStr += '需手动部署平台：Flyio, Glitch, Replit, Dragon \n';
+    dateStr += '已废弃用平台：RailWay, LeanCloud, Heroku\n';
     dateStr += '备胎候选平台：Render, NorthFlank \n';
     console.info(dateStr);
     return dateStr;
